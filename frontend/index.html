@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f2f4ef" />
+    <title>Identity Security Lab</title>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Identity Security Lab home">
+          <span class="brand-mark">IS</span>
+          <span>Identity Security Lab</span>
+        </a>
+        <div class="wallet-area">
+          <span id="network-state" class="network-state">Local chain only</span>
+          <button id="connect-wallet" class="button button-dark" type="button">Connect wallet</button>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="intro">
+          <div>
+            <p class="eyebrow">SMART CONTRACT RESEARCH / LOCAL ONLY</p>
+            <h1>Identity, under test.</h1>
+            <p class="intro-copy">Compare the observed behavior of vulnerable and access-controlled identity and credential contracts on your local Hardhat chain.</p>
+          </div>
+          <div class="guardrail"><span class="guardrail-dot"></span><span id="wallet-state">Wallet disconnected</span></div>
+        </section>
+
+        <nav class="tabs" aria-label="Research sections">
+          <button class="tab active" data-panel="identity-panel" type="button">Identity</button>
+          <button class="tab" data-panel="credential-panel" type="button">Credentials</button>
+          <button class="tab" data-panel="lab-panel" type="button">Comparison lab</button>
+        </nav>
+
+        <section class="panel active" id="identity-panel">
+          <div class="section-heading">
+            <div><p class="eyebrow">01 / IDENTITY RECORD</p><h2>Manage a synthetic identity</h2></div>
+            <span class="contract-chip">IdentitySecure</span>
+          </div>
+          <div class="columns">
+            <form id="identity-register-form" class="work-area">
+              <h3>Register or update</h3>
+              <label for="identity-name">Synthetic display label</label>
+              <input id="identity-name" name="name" maxlength="64" placeholder="synthetic-researcher-01" required />
+              <button class="button button-green" type="submit">Register identity</button>
+              <button id="identity-delete" class="button button-warn" type="button">Delete my identity</button>
+              <p class="field-note">A commitment is derived from the label. Do not enter personal data.</p>
+            </form>
+            <form id="identity-lookup-form" class="work-area">
+              <h3>Inspect a record</h3>
+              <label for="identity-address">Subject address</label>
+              <input id="identity-address" name="address" placeholder="0x…" spellcheck="false" required />
+              <button class="button button-outline" type="submit">Read secure record</button>
+              <div id="identity-result" class="result-box" aria-live="polite">No record queried.</div>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel" id="credential-panel">
+          <div class="section-heading">
+            <div><p class="eyebrow">02 / CREDENTIAL LIFECYCLE</p><h2>Issue, inspect, revoke</h2></div>
+            <span class="contract-chip">CredentialRegistrySecure</span>
+          </div>
+          <div class="columns">
+            <form id="issuer-form" class="work-area">
+              <h3>Issuer authorization</h3>
+              <p class="field-note">The registry deployer can authorize this connected wallet as an issuer.</p>
+              <button class="button button-outline" type="submit">Authorize connected wallet</button>
+              <p id="issuer-state" class="inline-state">Issuer status not checked.</p>
+            </form>
+            <form id="credential-issue-form" class="work-area">
+              <h3>Issue synthetic credential</h3>
+              <label for="credential-label">Credential label (hashed)</label>
+              <input id="credential-label" name="label" placeholder="synthetic-enrollment-01" required />
+              <label for="credential-subject">Subject address</label>
+              <input id="credential-subject" name="subject" placeholder="0x…" spellcheck="false" required />
+              <label for="credential-days">Valid for (days)</label>
+              <input id="credential-days" name="days" type="number" min="1" max="3650" value="30" required />
+              <button class="button button-green" type="submit">Issue credential</button>
+            </form>
+            <form id="credential-inspect-form" class="work-area">
+              <h3>Verify or revoke</h3>
+              <label for="credential-inspect-label">Credential label</label>
+              <input id="credential-inspect-label" name="label" placeholder="synthetic-enrollment-01" required />
+              <div class="button-row">
+                <button class="button button-outline" type="submit">Verify</button>
+                <button id="credential-revoke" class="button button-warn" type="button">Revoke</button>
+              </div>
+              <div id="credential-result" class="result-box" aria-live="polite">No credential queried.</div>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel" id="lab-panel">
+          <div class="section-heading">
+            <div><p class="eyebrow">03 / CONTROLLED EXPERIMENT</p><h2>Same action, different authorization</h2></div>
+            <span class="local-tag">HARDHAT LOCAL</span>
+          </div>
+          <div class="lab-grid">
+            <form id="attack-form" class="work-area">
+              <h3>Identity access-control test</h3>
+              <p class="field-note">First seed a target from its owner wallet, then switch to a different local account to test authorization.</p>
+              <label for="attack-subject">Target subject address</label>
+              <input id="attack-subject" placeholder="0x…" spellcheck="false" required />
+              <label for="attack-name">Replacement synthetic label</label>
+              <input id="attack-name" maxlength="64" value="attacker-controlled" required />
+              <div class="button-row">
+                <button id="seed-identity-both" class="button button-outline" type="button">Seed target in both</button>
+              </div>
+              <div class="button-row">
+                <button id="attack-vulnerable" class="button button-warn" type="button">Try vulnerable</button>
+                <button id="attack-secure" class="button button-outline" type="button">Try secure</button>
+              </div>
+              <div class="button-row">
+                <button id="delete-vulnerable" class="button button-warn" type="button">Delete on vulnerable</button>
+                <button id="delete-secure" class="button button-outline" type="button">Delete on secure</button>
+              </div>
+            </form>
+            <form id="credential-attack-form" class="work-area">
+              <h3>Credential authorization test</h3>
+              <p class="field-note">Seed both registries as an authorized issuer, then switch to an unauthorized local account.</p>
+              <label for="credential-attack-subject">Subject address</label>
+              <input id="credential-attack-subject" placeholder="0x…" spellcheck="false" required />
+              <label for="credential-attack-label">Synthetic credential label</label>
+              <input id="credential-attack-label" value="synthetic-forgery-test" required />
+              <div class="button-row">
+                <button id="seed-credential-both" class="button button-outline" type="button">Seed both registries</button>
+              </div>
+              <div class="button-row">
+                <button id="credential-forge-vulnerable" class="button button-warn" type="button">Issue on vulnerable</button>
+                <button id="credential-forge-secure" class="button button-outline" type="button">Try secure registry</button>
+              </div>
+              <div class="button-row">
+                <button id="revoke-credential-vulnerable" class="button button-warn" type="button">Revoke on vulnerable</button>
+                <button id="revoke-credential-secure" class="button button-outline" type="button">Try secure revocation</button>
+              </div>
+            </form>
+          </div>
+          <div class="comparison-strip">
+            <div><span class="comparison-mark mark-red">V</span><span><strong>Vulnerable</strong><small>Missing caller authorization</small></span></div>
+            <span class="comparison-arrow">versus</span>
+            <div><span class="comparison-mark mark-green">S</span><span><strong>Secure</strong><small>Owner / issuer checks enforced</small></span></div>
+          </div>
+        </section>
+
+        <section class="activity-section">
+          <div class="section-heading compact-heading"><div><p class="eyebrow">TRANSACTION TRACE</p><h2>Latest result</h2></div><button id="clear-log" class="button button-text" type="button">Clear</button></div>
+          <div id="activity-log" class="activity-log" aria-live="polite">Connect to the local Hardhat network to begin.</div>
+        </section>
+      </main>
+      <footer><span>Research sandbox · Synthetic data only</span><span>Chain ID 31337 required</span></footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

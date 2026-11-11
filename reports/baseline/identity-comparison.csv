@@ -1,0 +1,4 @@
+"id","vulnerability","vulnerable_outcome","secure_outcome","vulnerable_gas","secure_gas","mitigation"
+"unauthorized-modification","Missing access control permits identity modification","SUCCEEDED","BLOCKED","37457","24890","The secure function requires msg.sender to equal the identity subject."
+"unauthorized-deletion","Missing access control permits identity deletion","SUCCEEDED","BLOCKED","31097","22080","The secure function permits deletion only by the identity subject."
+"empty-input-validation","Missing validation accepts an empty name and zero commitment","ACCEPTED","REJECTED","50308","24286","The secure contract requires a 1-64 byte display name and a nonzero commitment."

@@ -1,0 +1,341 @@
+{
+  "title": "Identity Contract Security Comparison",
+  "generatedAt": "2026-10-25T05:59:31.794Z",
+  "network": {
+    "name": "hardhat",
+    "chainId": 31337
+  },
+  "testResults": {
+    "passing": 20,
+    "failing": 0,
+    "countsAvailable": true,
+    "exitCode": 0
+  },
+  "totals": {
+    "unauthorizedOperationsAttempted": 4,
+    "unauthorizedOperationsSucceededOnVulnerable": 4,
+    "unauthorizedOperationsBlockedOnSecure": 4,
+    "vulnerableUnauthorizedSuccessRate": 1,
+    "secureUnauthorizedBlockRate": 1
+  },
+  "gas": {
+    "vulnerableRegister": "90856",
+    "secureRegister": "91177",
+    "vulnerableOwnerUpdate": "37553",
+    "secureOwnerUpdate": "37711"
+  },
+  "notes": [
+    "All transactions were sent to the local Hardhat network using synthetic identities.",
+    "Identity authorization bypass is represented by the unauthorized identity modification experiment and counted once.",
+    "Gas values are from this execution and are not generalized benchmarks."
+  ],
+  "experiments": [
+    {
+      "id": "unauthorized-modification",
+      "unauthorized": true,
+      "vulnerability": "Missing access control permits identity modification",
+      "contracts": {
+        "vulnerable": "IdentityVulnerable",
+        "secure": "IdentitySecure"
+      },
+      "expectedResult": "The attacker changes the vulnerable record; the secure record remains owner-controlled.",
+      "vulnerable": {
+        "outcome": "SUCCEEDED",
+        "success": true,
+        "transactionHash": "0xf70fea894e9340d625fc87ab360c511ad82440600e3f10959014d527f4585458",
+        "gasUsed": "37457",
+        "failure": null,
+        "stateBefore": {
+          "displayName": "synthetic-subject-updated",
+          "commitment": "0x9049b826a4773dffb3263f9255b1df571e03a57cbadbe536486b53783587968f",
+          "exists": true
+        },
+        "stateAfter": {
+          "displayName": "attacker-modified",
+          "commitment": "0x7fb56e86ab68dafba7b797e1c1d2784ce5b04b47c7978d481ef97e0b04a24306",
+          "exists": true
+        }
+      },
+      "secure": {
+        "outcome": "BLOCKED",
+        "success": false,
+        "transactionHash": "0x575ad0d4e93054a2f74aa75ff1d7b5d9ab66e6de9d13b44e8f7847e7854e55e6",
+        "gasUsed": "24890",
+        "failure": "transaction execution reverted",
+        "stateBefore": {
+          "displayName": "synthetic-subject-updated",
+          "commitment": "0x9049b826a4773dffb3263f9255b1df571e03a57cbadbe536486b53783587968f",
+          "exists": true
+        },
+        "stateAfter": {
+          "displayName": "synthetic-subject-updated",
+          "commitment": "0x9049b826a4773dffb3263f9255b1df571e03a57cbadbe536486b53783587968f",
+          "exists": true
+        }
+      },
+      "mitigation": "The secure function requires msg.sender to equal the identity subject.",
+      "testExecutionStatus": "PASSED",
+      "actualResult": {
+        "vulnerableOutcome": "SUCCEEDED",
+        "secureOutcome": "BLOCKED"
+      }
+    },
+    {
+      "id": "unauthorized-deletion",
+      "unauthorized": true,
+      "vulnerability": "Missing access control permits identity deletion",
+      "contracts": {
+        "vulnerable": "IdentityVulnerable",
+        "secure": "IdentitySecure"
+      },
+      "expectedResult": "The attacker deletes the vulnerable record; the secure record remains active.",
+      "vulnerable": {
+        "outcome": "SUCCEEDED",
+        "success": true,
+        "transactionHash": "0xe03963c546eba1986502fcfa5f9153b4948874cbcb492e5902c19e9bb81a7d50",
+        "gasUsed": "31097",
+        "failure": null,
+        "stateBefore": {
+          "exists": true
+        },
+        "stateAfter": {
+          "exists": false
+        }
+      },
+      "secure": {
+        "outcome": "BLOCKED",
+        "success": false,
+        "transactionHash": "0x3fb636ccf02eab2eda54ef123aa8265a307986101226a233ed146a4a3d939f52",
+        "gasUsed": "22080",
+        "failure": "transaction execution reverted",
+        "stateBefore": {
+          "exists": true
+        },
+        "stateAfter": {
+          "exists": true
+        }
+      },
+      "mitigation": "The secure function permits deletion only by the identity subject.",
+      "testExecutionStatus": "PASSED",
+      "actualResult": {
+        "vulnerableOutcome": "SUCCEEDED",
+        "secureOutcome": "BLOCKED"
+      }
+    },
+    {
+      "id": "empty-input-validation",
+      "vulnerability": "Missing validation accepts an empty name and zero commitment",
+      "contracts": {
+        "vulnerable": "IdentityVulnerable",
+        "secure": "IdentitySecure"
+      },
+      "expectedResult": "The vulnerable registration accepts empty values; secure registration rejects them.",
+      "vulnerable": {
+        "outcome": "ACCEPTED",
+        "success": true,
+        "transactionHash": "0x8969f207ff1d8bdad9e05d97772478f1b82b705e7a65814f28f2e716263f863d",
+        "gasUsed": "50308",
+        "failure": null,
+        "stateAfter": {
+          "displayName": "",
+          "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "exists": true
+        }
+      },
+      "secure": {
+        "outcome": "REJECTED",
+        "success": false,
+        "transactionHash": "0x7e7f8d4e941fed93f2991433b2790e946dfca158fac4996df4a0dc670c847840",
+        "gasUsed": "24286",
+        "failure": "transaction execution reverted",
+        "stateAfter": {
+          "displayName": "",
+          "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "exists": false
+        }
+      },
+      "mitigation": "The secure contract requires a 1-64 byte display name and a nonzero commitment.",
+      "testExecutionStatus": "PASSED",
+      "actualResult": {
+        "vulnerableOutcome": "ACCEPTED",
+        "secureOutcome": "REJECTED"
+      }
+    },
+    {
+      "id": "unauthorized-credential-issuance",
+      "unauthorized": true,
+      "vulnerability": "Missing issuer authorization permits forged credential issuance",
+      "contracts": {
+        "vulnerable": "CredentialRegistryVulnerable",
+        "secure": "CredentialRegistrySecure"
+      },
+      "expectedResult": "The vulnerable registry accepts the attacker; the secure registry rejects it.",
+      "vulnerable": {
+        "outcome": "SUCCEEDED",
+        "success": true,
+        "transactionHash": "0x366d29dd87db4de75e083d9717262cf28f5ea3fa0862a37523400db6376b8837",
+        "gasUsed": "69090",
+        "failure": null,
+        "stateAfter": {
+          "subject": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "issuer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "expiresAt": "1792911585",
+          "revoked": false,
+          "exists": true,
+          "verified": true
+        }
+      },
+      "secure": {
+        "outcome": "BLOCKED",
+        "success": false,
+        "transactionHash": "0xd851b02db6c117a635292532a8d6543dfb46948ebf435f5208a63ec0d74deeb0",
+        "gasUsed": "24854",
+        "failure": "transaction execution reverted",
+        "stateAfter": {
+          "subject": "0x0000000000000000000000000000000000000000",
+          "issuer": "0x0000000000000000000000000000000000000000",
+          "expiresAt": "0",
+          "revoked": false,
+          "exists": false,
+          "verified": false
+        }
+      },
+      "mitigation": "Only administrator-authorized issuer addresses can issue credentials.",
+      "testExecutionStatus": "PASSED",
+      "actualResult": {
+        "vulnerableOutcome": "SUCCEEDED",
+        "secureOutcome": "BLOCKED"
+      }
+    },
+    {
+      "id": "credential-input-validation",
+      "vulnerability": "Missing credential validation accepts zero identifiers, zero subjects, and expired credentials",
+      "contracts": {
+        "vulnerable": "CredentialRegistryVulnerable",
+        "secure": "CredentialRegistrySecure"
+      },
+      "expectedResult": "The vulnerable registry stores malformed fields; the secure registry rejects them.",
+      "vulnerable": {
+        "outcome": "ACCEPTED",
+        "success": true,
+        "transactionHash": "0x7f69100033fc992a98705adae188aa75588d69c0cb4e840558e26eb19d9af76b",
+        "gasUsed": "48518",
+        "failure": null,
+        "stateBefore": {
+          "exists": false
+        },
+        "stateAfter": {
+          "subject": "0x0000000000000000000000000000000000000000",
+          "issuer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "expiresAt": "0",
+          "exists": true
+        }
+      },
+      "secure": {
+        "outcome": "REJECTED",
+        "success": false,
+        "transactionHash": "0x8de262ea6b95c118e0936a8b33661619216d098993e456e17bbdebf6a349c37c",
+        "gasUsed": "24193",
+        "failure": "transaction execution reverted",
+        "stateBefore": {
+          "exists": false
+        },
+        "stateAfter": {
+          "subject": "0x0000000000000000000000000000000000000000",
+          "issuer": "0x0000000000000000000000000000000000000000",
+          "expiresAt": "0",
+          "exists": false
+        }
+      },
+      "mitigation": "The secure registry checks credential ID, subject, expiry, and duplicate status.",
+      "testExecutionStatus": "PASSED",
+      "actualResult": {
+        "vulnerableOutcome": "ACCEPTED",
+        "secureOutcome": "REJECTED"
+      }
+    },
+    {
+      "id": "unauthorized-credential-revocation",
+      "unauthorized": true,
+      "vulnerability": "Missing revocation authorization permits denial of credential validity",
+      "contracts": {
+        "vulnerable": "CredentialRegistryVulnerable",
+        "secure": "CredentialRegistrySecure"
+      },
+      "expectedResult": "The vulnerable registry accepts the attacker; the secure registry preserves the credential.",
+      "vulnerable": {
+        "outcome": "SUCCEEDED",
+        "success": true,
+        "transactionHash": "0xe491eecc325831ebd01596b26a49edb919b212e885a685a0cab1df4e76be36cb",
+        "gasUsed": "28673",
+        "failure": null,
+        "stateAfter": {
+          "subject": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "issuer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "revoked": true,
+          "verified": false
+        }
+      },
+      "secure": {
+        "outcome": "BLOCKED",
+        "success": false,
+        "transactionHash": "0xcfb4f04a7ca526b39518dee59fca2e75583bb40372fdcec4dce156d918d9e174",
+        "gasUsed": "24325",
+        "failure": "transaction execution reverted",
+        "stateAfter": {
+          "subject": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "issuer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "revoked": false,
+          "verified": true
+        }
+      },
+      "mitigation": "Only the credential issuer or registry administrator can revoke a credential.",
+      "testExecutionStatus": "PASSED",
+      "actualResult": {
+        "vulnerableOutcome": "SUCCEEDED",
+        "secureOutcome": "BLOCKED"
+      }
+    },
+    {
+      "id": "credential-expiration",
+      "vulnerability": "Credential validity must end at the recorded expiration timestamp",
+      "contracts": {
+        "vulnerable": "CredentialRegistryVulnerable",
+        "secure": "CredentialRegistrySecure"
+      },
+      "expectedResult": "Credentials verify before expiration and fail verification at or after expiration.",
+      "vulnerable": {
+        "outcome": "EXPIRED",
+        "success": true,
+        "transactionHash": "0x8372b043adbc7a4276dcd542241b29a28ce7bcbaf2c5db9152c79ebcd3968447",
+        "gasUsed": "69090",
+        "stateBefore": {
+          "verified": true
+        },
+        "stateAfter": {
+          "verified": false,
+          "expiresAt": "1792908293"
+        }
+      },
+      "secure": {
+        "outcome": "EXPIRED",
+        "success": true,
+        "transactionHash": "0x2dd2f4078aed94d1bfc438669324b95483d68fd6772029c083c36812f00f2157",
+        "gasUsed": "71665",
+        "stateBefore": {
+          "verified": true
+        },
+        "stateAfter": {
+          "verified": false,
+          "expiresAt": "1792908293"
+        }
+      },
+      "mitigation": "Verification checks block.timestamp against the credential's expiration timestamp.",
+      "testExecutionStatus": "PASSED",
+      "actualResult": {
+        "vulnerableOutcome": "EXPIRED",
+        "secureOutcome": "EXPIRED"
+      }
+    }
+  ]
+}

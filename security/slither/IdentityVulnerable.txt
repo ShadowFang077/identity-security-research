@@ -1,0 +1,7 @@
+$ C:\developer\identity-project\security\.venv\Scripts\slither.exe C:\developer\identity-project\blockchain\contracts\IdentityVulnerable.sol --solc C:\developer\identity-project\security\.venv\Scripts\solc.exe --json C:\developer\identity-project\security\slither\IdentityVulnerable.json
+Multiple frameworks detected: solc, Solc-json. Using solc (highest priority). Use --compile-force-framework to override.
+'C:\developer\identity-project\security\.venv\Scripts\solc.exe --version' running
+'C:\developer\identity-project\security\.venv\Scripts\solc.exe C:\developer\identity-project\blockchain\contracts\IdentityVulnerable.sol --combined-json abi,ast,bin,bin-runtime,srcmap,srcmap-runtime,userdoc,devdoc,hashes --allow-paths .,C:\developer\identity-project\blockchain\contracts' running
+
+C:\developer\identity-project\blockchain\contracts\IdentityVulnerable.sol analyzed (1 contracts with 102 detectors), 0 result(s) found
+INFO:Slither:C:\developer\identity-project\security\slither\IdentityVulnerable.json exists already, the overwrite is prevented

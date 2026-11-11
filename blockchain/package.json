@@ -1,0 +1,21 @@
+{
+  "name": "identity-security-research",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local Hardhat experiments comparing vulnerable and secure identity contracts",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "experiment": "hardhat run scripts/run-experiments.js",
+    "research": "node scripts/run-research.js",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy-local.js --network localhost",
+    "smoke:local": "hardhat run scripts/smoke-local.js --network localhost"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.8",
+    "chai": "4.5.0",
+    "ethers": "6.13.4",
+    "hardhat": "2.26.3"
+  }
+}

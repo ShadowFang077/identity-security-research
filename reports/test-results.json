@@ -1,0 +1,8 @@
+{
+  "executedAt": "2026-10-25T05:59:29.870Z",
+  "exitCode": 0,
+  "passing": 20,
+  "failing": 0,
+  "countsAvailable": true,
+  "output": "Credential registry security comparison\n    ✔ allows an authorized issuer to issue a subject-bound credential\n    ✔ permits credential forgery on the vulnerable registry and blocks unauthorized issuance\n    ✔ allows unauthorized revocation on the vulnerable registry and blocks it securely\n    ✔ rejects invalid hashes, subjects, and already-expired credentials\n    ✔ accepts malformed credential data in the vulnerable registry\n    ✔ rejects duplicate credential identifiers\n    ✔ automatically reports credentials as invalid after expiry in both registries\n    ✔ restricts issuer authorization changes to the registry administrator\n    ✔ limits credential revocation to its issuer or the administrator\n\n  Identity security comparison\n    ✔ registers and verifies an identity on both contracts\n    ✔ allows an unauthorized identity modification in the vulnerable contract\n    ✔ blocks an unauthorized identity modification in the secure contract\n    ✔ allows an unauthorized identity deletion in the vulnerable contract\n    ✔ blocks an unauthorized identity deletion in the secure contract\n    ✔ allows the identity owner to update and delete a secure identity\n    ✔ accepts empty identity data in the vulnerable contract\n    ✔ rejects empty names and zero commitments in the secure contract\n    ✔ rejects overlong identity labels in the secure contract\n    ✔ rejects duplicate registration in the secure contract\n    ✔ allows duplicate registration in the vulnerable contract\n\n\n  20 passing (1s)"
+}

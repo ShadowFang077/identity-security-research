@@ -1,0 +1,117 @@
+{
+  "title": "Identity Contract Security Comparison",
+  "generatedAt": "2026-10-24T07:39:49.968Z",
+  "network": {
+    "name": "hardhat",
+    "chainId": 31337
+  },
+  "testResults": {
+    "passing": 10,
+    "failing": 0,
+    "countsAvailable": true,
+    "exitCode": 0
+  },
+  "totals": {
+    "unauthorizedOperationsAttempted": 2,
+    "unauthorizedOperationsSucceededOnVulnerable": 2,
+    "unauthorizedOperationsBlockedOnSecure": 2,
+    "vulnerableUnauthorizedSuccessRate": 1,
+    "secureUnauthorizedBlockRate": 1
+  },
+  "gas": {
+    "vulnerableRegister": "90856",
+    "secureRegister": "91177",
+    "vulnerableOwnerUpdate": "37553",
+    "secureOwnerUpdate": "37711"
+  },
+  "notes": [
+    "All transactions were sent to the local Hardhat network using synthetic identities.",
+    "Authorization-bypass and unauthorized-modification describe the same update operation and are counted once.",
+    "Gas values are from this execution and are not generalized benchmarks."
+  ],
+  "experiments": [
+    {
+      "id": "unauthorized-modification",
+      "vulnerability": "Missing access control permits identity modification",
+      "vulnerable": {
+        "outcome": "SUCCEEDED",
+        "success": true,
+        "transactionHash": "0x16a1251c3a78aebded3822941a7f1359930b87013bb42e0857dd384b168aea81",
+        "gasUsed": "37457",
+        "failure": null,
+        "stateAfter": {
+          "displayName": "attacker-modified",
+          "commitment": "0x7fb56e86ab68dafba7b797e1c1d2784ce5b04b47c7978d481ef97e0b04a24306",
+          "exists": true
+        }
+      },
+      "secure": {
+        "outcome": "BLOCKED",
+        "success": false,
+        "transactionHash": "0xf0632ef0babc1b475a496905a699df5b9c9c7164674ea05db13e087dc0e21b12",
+        "gasUsed": "24890",
+        "failure": "transaction execution reverted",
+        "stateAfter": {
+          "displayName": "synthetic-subject-updated",
+          "commitment": "0x9049b826a4773dffb3263f9255b1df571e03a57cbadbe536486b53783587968f",
+          "exists": true
+        }
+      },
+      "mitigation": "The secure function requires msg.sender to equal the identity subject."
+    },
+    {
+      "id": "unauthorized-deletion",
+      "vulnerability": "Missing access control permits identity deletion",
+      "vulnerable": {
+        "outcome": "SUCCEEDED",
+        "success": true,
+        "transactionHash": "0x28c291ad658c32bc4b260b6b7242ac04833edc9e5a5fde27559ab641feb341ce",
+        "gasUsed": "31097",
+        "failure": null,
+        "stateAfter": {
+          "exists": false
+        }
+      },
+      "secure": {
+        "outcome": "BLOCKED",
+        "success": false,
+        "transactionHash": "0xe60fa874d51f30c952732e1c4692e688a4aefc1bfff5908eb2fa406921792697",
+        "gasUsed": "22080",
+        "failure": "transaction execution reverted",
+        "stateAfter": {
+          "exists": true
+        }
+      },
+      "mitigation": "The secure function permits deletion only by the identity subject."
+    },
+    {
+      "id": "empty-input-validation",
+      "vulnerability": "Missing validation accepts an empty name and zero commitment",
+      "vulnerable": {
+        "outcome": "ACCEPTED",
+        "success": true,
+        "transactionHash": "0xa1229b39a53e401df38668c99fb90146d93e617c8eeca3a6b5684a9160ac098f",
+        "gasUsed": "50308",
+        "failure": null,
+        "stateAfter": {
+          "displayName": "",
+          "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "exists": true
+        }
+      },
+      "secure": {
+        "outcome": "REJECTED",
+        "success": false,
+        "transactionHash": "0x4930648c85ef89fb67b287c73d4f81c6e19b77c1fe724fa5db5d5ec67f24b26b",
+        "gasUsed": "24286",
+        "failure": "transaction execution reverted",
+        "stateAfter": {
+          "displayName": "",
+          "commitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "exists": false
+        }
+      },
+      "mitigation": "The secure contract requires a 1-64 byte display name and a nonzero commitment."
+    }
+  ]
+}

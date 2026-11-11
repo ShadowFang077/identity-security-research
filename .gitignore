@@ -1,0 +1,8 @@
+node_modules/
+blockchain/artifacts/
+blockchain/cache/
+blockchain/coverage/
+frontend/node_modules/
+frontend/dist/
+frontend/deployments.local.json
+security/.venv/

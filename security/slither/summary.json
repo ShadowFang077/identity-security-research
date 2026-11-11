@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-10-24T09:19:08.387553+00:00",
+  "compiler": "solc, the solidity compiler commandline interface\nVersion: 0.8.24+commit.e11b9ed9.Windows.msvc",
+  "contracts": [
+    {
+      "contract": "IdentityVulnerable",
+      "analysisSucceeded": true,
+      "returnCode": 0,
+      "findingCount": 0,
+      "findings": []
+    },
+    {
+      "contract": "IdentitySecure",
+      "analysisSucceeded": true,
+      "returnCode": 0,
+      "findingCount": 0,
+      "findings": []
+    },
+    {
+      "contract": "CredentialRegistryVulnerable",
+      "analysisSucceeded": true,
+      "returnCode": 4294967295,
+      "findingCount": 1,
+      "findings": [
+        {
+          "check": "timestamp",
+          "impact": "Low",
+          "confidence": "Medium",
+          "description": "CredentialRegistryVulnerable.verifyCredential(bytes32) (blockchain/contracts/CredentialRegistryVulnerable.sol#32-35) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- credential.exists && ! credential.revoked && block.timestamp < credential.expiresAt (blockchain/contracts/CredentialRegistryVulnerable.sol#34)"
+        }
+      ]
+    },
+    {
+      "contract": "CredentialRegistrySecure",
+      "analysisSucceeded": true,
+      "returnCode": 4294967295,
+      "findingCount": 2,
+      "findings": [
+        {
+          "check": "timestamp",
+          "impact": "Low",
+          "confidence": "Medium",
+          "description": "CredentialRegistrySecure.verifyCredential(bytes32) (blockchain/contracts/CredentialRegistrySecure.sol#70-73) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- credential.exists && ! credential.revoked && block.timestamp < credential.expiresAt (blockchain/contracts/CredentialRegistrySecure.sol#72)"
+        },
+        {
+          "check": "timestamp",
+          "impact": "Low",
+          "confidence": "Medium",
+          "description": "CredentialRegistrySecure.issueCredential(bytes32,address,uint64) (blockchain/contracts/CredentialRegistrySecure.sol#44-55) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- require(bool,string)(expiresAt > block.timestamp,Credential already expired) (blockchain/contracts/CredentialRegistrySecure.sol#50)"
+        }
+      ]
+    }
+  ]
+}

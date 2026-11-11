@@ -1,0 +1,8 @@
+{
+  "executedAt": "2026-10-24T07:39:48.037Z",
+  "exitCode": 0,
+  "passing": 10,
+  "failing": 0,
+  "countsAvailable": true,
+  "output": "Identity security comparison\n    ✔ registers and verifies an identity on both contracts\n    ✔ allows an unauthorized identity modification in the vulnerable contract\n    ✔ blocks an unauthorized identity modification in the secure contract\n    ✔ allows an unauthorized identity deletion in the vulnerable contract\n    ✔ blocks an unauthorized identity deletion in the secure contract\n    ✔ allows the identity owner to update and delete a secure identity\n    ✔ accepts empty identity data in the vulnerable contract\n    ✔ rejects empty names and zero commitments in the secure contract\n    ✔ rejects duplicate registration in the secure contract\n    ✔ allows duplicate registration in the vulnerable contract\n\n\n  10 passing (898ms)"
+}
